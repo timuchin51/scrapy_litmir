@@ -5,8 +5,9 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 import scrapy
+from urllib.parse import urlparse
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst, Join, Compose, MapCompose
+from scrapy.loader.processors import TakeFirst, Join, Compose
 
 
 def description_clean(values):
@@ -18,8 +19,14 @@ def description_join(values):
     return ' '.join(values)
 
 
+def id_parser(url):
+    query = urlparse(url[0]).query
+    id = query.split('=')[1]
+    return id
+
+
 class Book(scrapy.Item):
-    book_name = scrapy.Field()
+    title = scrapy.Field()
     author = scrapy.Field()
     genre = scrapy.Field()
     number_of_pages = scrapy.Field()
@@ -35,24 +42,25 @@ class Book(scrapy.Item):
     description = scrapy.Field()
     image_urls = scrapy.Field()
     images = scrapy.Field()
-    author_from_book_id = scrapy.Field()
+    author_book_id = scrapy.Field()
     book_id = scrapy.Field()
 
 
 class BookItemLoader(ItemLoader):
-    book_name_out = TakeFirst()
+    title_out = TakeFirst()
     number_of_pages_out = TakeFirst()
     number_of_pages_in = Join()
     in_language_out = TakeFirst()
     description_in = Compose(description_clean, description_join)
     description_out = TakeFirst()
-    # images_out = TakeFirst()
-    # author_from_book_id_out = TakeFirst()
+    author_book_id_in = Compose(id_parser)
+    book_id_in = Compose(id_parser)
+    author_book_id_out = TakeFirst()
     book_id_out = TakeFirst()
 
 
 class Author(scrapy.Item):
-    author_name = scrapy.Field()
+    name = scrapy.Field()
     gender = scrapy.Field()
     birth_date = scrapy.Field()
     birth_place = scrapy.Field()
@@ -65,10 +73,11 @@ class Author(scrapy.Item):
 class AuthorItemLoader(ItemLoader):
     author_bio_in = Compose(description_clean, description_join)
     author_bio_out = TakeFirst()
-    author_name_out = TakeFirst()
+    name_out = TakeFirst()
     gender_out = TakeFirst()
     birth_date_out = TakeFirst()
     birth_place_out = TakeFirst()
     death_date_out = TakeFirst()
     death_place_out = TakeFirst()
+    author_id_in = Compose(id_parser)
     author_id_out = TakeFirst()

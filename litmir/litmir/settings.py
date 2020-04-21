@@ -8,25 +8,27 @@
 #     https://docs.scrapy.org/en/latest/topics/settings.html
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 BOT_NAME = 'litmir'
 
 SPIDER_MODULES = ['litmir.spiders']
 NEWSPIDER_MODULE = 'litmir.spiders'
 
-FEED_FORMAT = 'json'
-FEED_EXPORT_ENCODING = 'utf-8'
-# FEED_URI = '/home/timuchin/scrapy/litmir/feeds/%(name)s/%(time)s.json'
-FEED_EXPORT_INDENT = '3'
-# FEED_EXPORT_FIELDS = []
+# FEED_FORMAT = 'json'
+# FEED_EXPORT_ENCODING = 'utf-8'
+# FEED_URI = basedir + '/feeds/%(name)s/%(time)s.json'
+# FEED_EXPORT_INDENT = '3'
+# # FEED_EXPORT_FIELDS = []
 
 LOG_LEVEL = 'INFO'
-LOG_FILE = '/home/timuchin/scrapy/litmir/log/books.log'
+# LOG_FILE = basedir + '/log/books.log'
 # LOG_SHORT_NAME = True
-LOGSTATS_INTERVAL = '60'
-LOG_ENCODING = 'utf-8'
+# LOGSTATS_INTERVAL = '60'
+# LOG_ENCODING = 'utf-8'
 
-DB_NAME = 'litmir.db'
+DB_NAME = 'litmir.sqlite'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'litmir (+http://www.yourdomain.com)'
 
@@ -34,8 +36,8 @@ DB_NAME = 'litmir.db'
 ROBOTSTXT_OBEY = False
 
 # storeg for images and files
-FILES_STORE = '/home/timuchin/scrapy/litmir/files'
-IMAGES_STORE = '/home/timuchin/scrapy/litmir/images'
+FILES_STORE = basedir + '/files'
+IMAGES_STORE = basedir + '/images'
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
